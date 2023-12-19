@@ -3,6 +3,7 @@ import logging
 import shutil
 import time
 
+import argparse
 import magic
 
 location = "D:\\UserData\\Mike\\Downloads\\"
@@ -13,6 +14,11 @@ cat = {"image": ["Pictures", ["png", "webp"]], "document": ["Documents", ["pdf",
        "source": ["Scripts", ["ino", "cpp", "js"]]}
 logging.basicConfig(filename=log_file, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
+
+
+def setup_logging(log_file):
+    logging.basicConfig(filename=log_file, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s',
+                        level=logging.DEBUG)
 
 
 def sort_file(file, idk):
@@ -42,8 +48,23 @@ def check_directory(loc_dir):
                 logging.error(f"Error identifying file type for {file}: {e}")
 
 
+def main():
+    parser = argparse.ArgumentParser(description='Clean up files in a directory based on categories.')
+    parser.add_argument('--location', type=str, default=location, help='The directory to clean up')
+    parser.add_argument('--log_file', type=str, default=f"cleanup_on_{int(time.time())}.log", help='The log file name')
+    args = parser.parse_args()
+
+    setup_logging(args.log_file)
+    logging.info("Starting cleanup script.")
+
+    # Call the check_directory function with the specified location
+    check_directory(args.location)
+
+    logging.info("Cleanup script completed.")
+
+
 if __name__ == "__main__":
-    check_directory(location)
+    main()
 
 # excutable
 # media
