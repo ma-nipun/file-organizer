@@ -8,8 +8,9 @@ import magic
 location = "D:\\UserData\\Mike\\Downloads\\"
 log_file = f"cleanup on {int(time.time())}.log"
 
-cat = {"image": ["Pictures", ["png", "jpg"]], "document": ["Documents", ["pdf", "xlsx"]],
-       "archive": ["Compressed", ["zip", "rar"]], "executable ": ["Programs", ["exe", "msi"]]}
+cat = {"image": ["Pictures", ["png", "webp"]], "document": ["Documents", ["pdf", "xlsx"]],
+       "archive": ["Compressed", ["xz", "gz", "tar"]], "executable": ["Programs", ["exe", "msi"]],
+       "source": ["Scripts", ["ino", "cpp", "js"]]}
 logging.basicConfig(filename=log_file, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
 
@@ -18,7 +19,7 @@ def sort_file(file, idk):
     logging.info(f"processing file {file}")
     logging.debug(idk)
     for catagory in list(cat.keys()):
-        if catagory in idk or file in cat[catagory][1]:
+        if catagory in idk or file.split(".")[-1] in cat[catagory][1]:
             if not os.path.exists(os.path.join(location, cat[catagory][0])):
                 logging.info(f"Creating Folder {cat[catagory][0]}")
                 os.makedirs(os.path.join(location, cat[catagory][0]))
