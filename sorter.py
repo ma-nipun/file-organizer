@@ -1,14 +1,17 @@
 import os
 import logging
 import shutil
+import time
 
 import magic
 
 location = "D:\\UserData\\Mike\\Downloads\\"
+log_file = f"cleanup on {int(time.time())}.log"
 
-cat = {"image": ["Pictures", ["png", "jpg"]], "document": ["Documents", ["pdf", "ocr"]],
-       "archive": ["Compressed", ["zip", "rar"]]}
-logging.basicConfig(level=logging.DEBUG)
+cat = {"image": ["Pictures", ["png", "jpg"]], "document": ["Documents", ["pdf", "xlsx"]],
+       "archive": ["Compressed", ["zip", "rar"]], "executable ": ["Programs", ["exe", "msi"]]}
+logging.basicConfig(filename=log_file, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s',
+                    level=logging.DEBUG)
 
 
 def sort_file(file, idk):
@@ -25,19 +28,21 @@ def sort_file(file, idk):
             return True
 
 
+def check_directory(loc_dir):
+    total_files = os.listdir(loc_dir)
+    logging.info(f"found {len(total_files)} files")
+    for file in os.listdir(loc_dir):
+        file_path = os.path.join(loc_dir, file)
+        if os.path.isfile(file_path):
+            try:
+                idk = magic.from_buffer(open(file_path, "rb").read(2048))
+                sort_file(file, idk)
+            except magic.MagicException as e:
+                logging.error(f"Error identifying file type for {file}: {e}")
 
-for file in os.listdir(location):
-    file_path = os.path.join(location, file)
-    if os.path.isfile(file_path):
-        try:
-            file_type = magic.Magic()
-            idk = magic.from_buffer(open(file_path, "rb").read(2048))
-            # print(f"File: {file}, Type: {idk}")
-            sort_file(file, idk)
-            # split = file_type.from_file(file_path).split(", ")
-        except magic.MagicException as e:
-            print(f"Error identifying file type for {file}: {e}")
 
+if __name__ == "__main__":
+    check_directory(location)
 
 # excutable
 # media
