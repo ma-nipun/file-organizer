@@ -23,7 +23,7 @@ To use the script, follow these steps:
 2. Install the required Python libraries:
 
    ```bash
-   pip install python-magic
+    pip install -r requirements.txt
    ```
 
 3. Run the script using the following command:
