@@ -21,11 +21,11 @@ def setup_logging(log_file):
                         level=logging.DEBUG)
 
 
-def sort_file(file, idk):
+def sort_file(file, file_info):
     logging.info(f"processing file {file}")
-    logging.debug(idk)
+    logging.debug(file_info)
     for catagory in list(cat.keys()):
-        if catagory in idk or file.split(".")[-1] in cat[catagory][1]:
+        if catagory in file_info or file.split(".")[-1] in cat[catagory][1]:
             if not os.path.exists(os.path.join(location, cat[catagory][0])):
                 logging.info(f"Creating Folder {cat[catagory][0]}")
                 os.makedirs(os.path.join(location, cat[catagory][0]))
@@ -36,16 +36,15 @@ def sort_file(file, idk):
 
 
 def check_directory(loc_dir):
-    total_files = os.listdir(loc_dir)
-    logging.info(f"found {len(total_files)} files")
-    for file in os.listdir(loc_dir):
-        file_path = os.path.join(loc_dir, file)
-        if os.path.isfile(file_path):
-            try:
-                idk = magic.from_buffer(open(file_path, "rb").read(2048))
-                sort_file(file, idk)
-            except magic.MagicException as e:
-                logging.error(f"Error identifying file type for {file}: {e}")
+    total_items = os.listdir(loc_dir)
+    total_files = [file for file in os.listdir(loc_dir) if os.path.isfile(os.path.join(loc_dir, file))]
+    logging.info(f"found {len(total_files)} Files, out of {len(total_items)} Items")
+    for file in total_files:
+        try:
+            idk = magic.from_buffer(open(os.path.join(loc_dir, file), "rb").read(2048))
+            sort_file(file, idk)
+        except magic.MagicException as e:
+            logging.error(f"Error identifying file type for {file}: {e}")
 
 
 def main():
