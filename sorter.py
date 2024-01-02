@@ -9,7 +9,7 @@ import magic
 location = "D:\\UserData\\Mike\\Downloads\\"
 log_file = f"cleanup on {int(time.time())}.log"
 
-cat = {"image": ["Pictures", ["png", "webp"]], "document": ["Documents", ["pdf", "xlsx"]],
+cat = {"image": ["Pictures", ["png", "webp"]], "image": ["Video", ["mp4", "mkv"]], "document": ["Documents", ["pdf", "xlsx"]],
        "archive": ["Compressed", ["xz", "gz", "tar"]], "executable": ["Programs", ["exe", "msi"]],
        "source": ["Scripts", ["ino", "cpp", "js"]]}
 logging.basicConfig(filename=log_file, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s',
